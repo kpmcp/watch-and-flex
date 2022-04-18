@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <h2>Что мы нашли по запросу {{ search_info }}</h2>
+    <div class="results">
+        {% for film in films %}
+            {% if search_info.lower() in film.title.lower() %}
+                <a href="/films/{{ film.id }}" class="result">
+                    <div class="poster">
+                        <img src="{{ url_for('get_poster', id=film.id) }}" alt="Не удалось загрузить картинку">
+                    </div>
+                    <div class="description">
+                        <div class="title">
+                            <h3>{{ film.title }}</h3>
+                            <div class="stars">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                {{ film.rating }}
+                            </div>
+                        </div>
+                        <p>{{ film.long_description }}</p>
+                    </div>
+                </a>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

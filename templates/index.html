@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <div class="heading">
+        <h1>Наши рекомендации</h1>
+    </div>
+    <div class="part_of_recomendations">
+        <h3>Комедии</h3>
+        <div class="films">
+            {% for film in films %}
+            {% if "комедия" in film.genre.lower() %}
+            <a href="/films/{{ film.id }}" class="film">
+                <div class="image">
+                    <img src="{{ url_for('get_poster', id=film.id) }}" alt="Не удалось загрузить картинку">
+                </div>
+                <div class="description">
+                    <p> {{ film.short_description }} </p>
+                </div>
+            </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <hr>
+    </div>
+    <div class="part_of_recomendations">
+        <h3>Фантастика</h3>
+        <div class="films">
+            {% for film in films %}
+            {% if "фантастика" in film.genre.lower() %}
+            <a href="/films/{{ film.id }}" class="film">
+                <div class="image">
+                    <img src="{{ url_for('get_poster', id=film.id) }}" alt="Не удалось загрузить картинку">
+                </div>
+                <div class="description">
+                    <p> {{ film.short_description }} </p>
+                </div>
+            </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <hr>
+    </div>
+    <div class="part_of_recomendations">
+        <h3>Драммы</h3>
+        <div class="films">
+            {% for film in films %}
+            {% if "драмма" in film.genre.lower() %}
+            <a href="/films/{{ film.id }}" class="film">
+                <div class="image">
+                    <img src="{{ url_for('get_poster', id=film.id) }}" alt="Не удалось загрузить картинку">
+                </div>
+                <div class="description">
+                    <p> {{ film.short_description }} </p>
+                </div>
+            </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <hr>
+    </div>
+    <div class="part_of_recomendations">
+        <h3>Ужасы</h3>
+        <div class="films">
+            {% for film in films %}
+            {% if "ужасы" in film.genre.lower() %}
+            <a href="/films/{{ film.id }}" class="film">
+                <div class="image">
+                    <img src="{{ url_for('get_poster', id=film.id) }}" alt="Не удалось загрузить картинку">
+                </div>
+                <div class="description">
+                    <p> {{ film.short_description }} </p>
+                </div>
+            </a>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

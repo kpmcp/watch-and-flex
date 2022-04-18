@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <div class="info">
+        <div class="part1">
+            <div class="poster">
+                <img src="{{ url_for('get_poster', id=film.id) }}" alt="Не удалось загрузить картинку">
+            </div>
+            <video class="trailer" controls src="{{ url_for('get_trailer', id=film.id) }}">
+            </video>
+        </div>
+        <div class="part2">
+            <div class="title">
+                <h2>{{ film.title }}</h2>
+                <div class="stars">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    {{ film.rating }} / 10
+                </div>
+            </div>
+            <span class="rating">{{ film.age }}+</span>
+            <h3>О фильме</h3>
+            <div class="stats">
+                <div class="part">
+                    <div class="name">Год
+                    </div>
+                    <div class="stat">{{ film.year }}</div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Страна</div>
+                    <div class="stat">{{ film.country }}</div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Жанр</div>
+                    <div class="stat">
+                        {{ film.genre }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Слоган</div>
+                    <div class="stat">
+                        {{ film.slogan }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Режиссер</div>
+                    <div class="stat">
+                        {{ film.director }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Сценарий</div>
+                    <div class="stat">
+                        {{ film.scenario }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Продюсер</div>
+                    <div class="stat">
+                        {{ film.producer }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Оператор</div>
+                    <div class="stat">
+                        {{ film.operator }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Композитор</div>
+                    <div class="stat">
+                        {{ film.composer }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Художник</div>
+                    <div class="stat">
+                        {{ film.designer }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Монтаж</div>
+                    <div class="stat">{{ film.montage }}</div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Бюджет</div>
+                    <div class="stat">${{ film.budget }}</div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Сборы в мире</div>
+                    <div class="stat">
+                        ${{ film.fees_in_the_world }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Зрители</div>
+                    <div class="stat">
+                        {{ film.audience }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Сборы в России
+                    </div>
+                    <div class="stat">
+                        ${{ film.fees_in_russia }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Премьера в мире</div>
+                    <div class="stat">
+                        {{ film.world_premiere }}
+                    </div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Возраст</div>
+                    <div class="stat">{{ film.age }}+</div>
+                </div>
+                <hr>
+                <div class="part">
+                    <div class="name">Время</div>
+                    <div class="stat">
+                        {{ film.time }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if is_admin %}
+        <div class="admin_buttons">
+            <a href="/edit_film/{{ film.id }}" class="edit">Изменить</a>
+            <a href="/delete_film/{{ film.id }}" class="delete">Удалить</a>
+        </div>
+    {% endif %}
+    <div class="description">
+        <h2>Описание</h2>
+        <p>{{ film.long_description }}</p>
+    </div>
+    <div class="galery">
+        <h2>Кадры из фильма</h2>
+        <div class="frames">
+            {% for frame in range(1, 4) %}
+            <div class="frame">
+                <img src="{{ url_for('get_frame', id=film.id, frame=frame) }}" alt="Не удалось загрузить картинку">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% if is_authenticated %}
+        <div class="add_review">
+            {% if current_user_review %}
+                <h2>Редактировать отзыв</h2>
+                <form method="POST" action="">
+                    <div class="rating-area">
+                        {% for mark_field in review_form.mark %}
+                            {% if (11 - loop.index) == current_user_review["mark"] | int %}
+                                {{ mark_field(value=(11 - loop.index), checked=true) }}
+                                {{ mark_field.label() }}
+                            {% else %}
+                                {{ mark_field(value=(11 - loop.index)) }}
+                                {{ mark_field.label() }}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% set a = review_form.text.process_data(current_user_review["text"]) %}
+                    {{ review_form.text(placeholder="Введите текст") }}
+                    {{ review_form.submit(class="button") }}
+                </form>
+            {% endif %}
+
+            {% if not current_user_review %}
+                <h2>Добавить отзыв</h2>
+                <form method="POST" action="">
+                    <div class="rating-area">
+                        {% for mark_field in review_form.mark %}
+                            {{ mark_field(value=(11 - loop.index)) }}
+                            {{ mark_field.label }}
+                        {% endfor %}
+                    </div>
+
+                    {{ review_form.text(placeholder="Введите текст") }}
+                    {{ review_form.submit(class="button") }}
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
+    <div class="reviews">
+        <h2>Отзывы</h2>
+        {% for element in review_info %}
+        <div class="review">
+            <div class="head">
+                <div class="profile">
+                    <img src="avatars/1.jpg" alt="#">
+                    <p>{{ element['username'] }}</p>
+                </div>
+                <div class="stars">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    {{ element['mark'] }}
+                </div>
+            </div>
+            <div class="text">
+                <p>
+                    {{ element['text'] }}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
